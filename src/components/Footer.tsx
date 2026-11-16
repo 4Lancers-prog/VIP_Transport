@@ -4,7 +4,7 @@ import { Phone, Mail, MapPin } from 'lucide-react';
 import { gsap, ScrollTrigger } from '../lib/gsap';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { Logo } from './ui/Logo';
-import { NAV_LINKS, SERVICES, CONTACT, VERIFIED, BRAND } from '../data/company';
+import { NAV_LINKS, SERVICES, CONTACT, VERIFIED, BRAND, DEVELOPER } from '../data/company';
 
 export function Footer() {
   const ref = useRef<HTMLElement>(null);
@@ -124,6 +124,17 @@ export function Footer() {
             © {year} {BRAND.name}. All rights reserved.
           </p>
           <p>Transportation, distribution &amp; fuel logistics in Bengaluru.</p>
+          <p>
+            Designed &amp; developed by{' '}
+            <a
+              href={DEVELOPER.url}
+              target="_blank"
+              rel="noopener"
+              className="font-semibold text-warm underline-offset-4 transition-colors hover:text-brand hover:underline focus-visible:text-brand focus-visible:underline"
+            >
+              {DEVELOPER.name}
+            </a>
+          </p>
         </div>
       </div>
     </footer>

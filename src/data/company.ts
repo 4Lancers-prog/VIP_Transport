@@ -396,3 +396,13 @@ export const REQUIREMENT_TYPES = [
   'Fuel Distribution Services',
   'Other Requirements',
 ] as const;
+
+/* -------------------------------------------------------------------------- */
+/*  Website credit (footer)                                                    */
+/* -------------------------------------------------------------------------- */
+
+export const DEVELOPER = {
+  name: '4Lancers',
+  // TODO: replace with the real 4Lancers website address.
+  url: 'https://4lancers.com',
+};
