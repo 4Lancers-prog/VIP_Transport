@@ -1,0 +1,5 @@
+# SPA fallback so client-side routes (e.g. /about, /capabilities) resolve on
+# static hosts like Netlify. For Vercel use a rewrite in vercel.json; for
+# Apache use .htaccess; for nginx a try_files rule. Vite dev + preview already
+# fall back to index.html automatically.
+/*    /index.html   200
