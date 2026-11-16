@@ -1,85 +1,68 @@
-import { useEffect, useRef } from 'react';
-import { gsap } from '../../lib/gsap';
+import { type CSSProperties } from 'react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useCountUp } from '../../hooks/useCountUp';
 import { FLEET, VERIFIED, type FleetClass } from '../../data/company';
 
 /**
- * Horizontal fleet gallery on a light surface. On wide screens the track scrubs
- * horizontally with vertical scroll (controlled, not hijacked); on mobile /
- * reduced-motion it's a vertical stack. Each capacity number counts up.
+ * Fleet capacity cards (20 KL up to 40 KL) in an infinite marquee, matching
+ * the clients strip: the track is duplicated and translated by exactly -50%,
+ * so the loop is seamless. Hover/focus pauses it. Under reduced motion it
+ * falls back to a static grid with every card visible.
  * Unit counts render as "indicative" until VERIFIED.fleet is true.
  */
-export function FleetShowcase() {
-  const root = useRef<HTMLDivElement>(null);
-  const track = useRef<HTMLDivElement>(null);
+export function FleetShowcase({ speedSeconds = 45 }: { speedSeconds?: number }) {
   const reduced = useReducedMotion();
-
-  useEffect(() => {
-    const section = root.current;
-    const el = track.current;
-    if (!section || !el || reduced) return;
-
-    const mm = gsap.matchMedia();
-    mm.add('(min-width: 768px)', () => {
-      const ctx = gsap.context(() => {
-        const distance = el.scrollWidth - el.clientWidth;
-        if (distance <= 0) return;
-        gsap.to(el, {
-          x: -distance,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top top',
-            end: () => `+=${distance + window.innerHeight * 0.6}`,
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-      }, section);
-      return () => ctx.revert();
-    });
-
-    return () => mm.revert();
-  }, [reduced]);
+  const min = Math.min(...FLEET.map((f) => f.capacityKL));
+  const max = Math.max(...FLEET.map((f) => f.capacityKL));
 
   return (
-    // Stable wrapper: GSAP pinning wraps the <section> in a pin-spacer, so
-    // React must remove THIS div on route change, never the moved section.
-    <div>
-      <section id="fleet" ref={root} className="relative overflow-hidden bg-canvas py-20 md:py-0">
-        <div className="shell flex h-auto flex-col justify-center md:h-screen">
-          <div className="mb-10 md:mb-12 md:pt-20">
-            <p className="section-label mb-4">The fleet</p>
-            <h2 className="font-display text-4xl leading-[0.95] text-ink md:text-6xl">
-              Capacity, matched to the job.
-            </h2>
-            <p className="mt-4 max-w-md text-sm text-graphite">
-              Tankers across four capacity classes, so we right-size the vehicle to
-              the consignment — from compact bulk runs to high-volume movements.
-            </p>
-          </div>
+    <section id="fleet" className="relative overflow-hidden bg-canvas py-20 md:py-28">
+      <div className="shell mb-10 md:mb-12">
+        <p className="section-label mb-4">The fleet</p>
+        <h2 className="font-display text-4xl leading-[0.95] text-ink md:text-6xl">
+          Capacity, matched to the job.
+        </h2>
+        <p className="mt-4 max-w-md text-sm text-graphite">
+          Tankers from {min} KL up to {max} KL, so we right-size the vehicle to the
+          consignment — from compact bulk runs to maximum-capacity movements.
+        </p>
+      </div>
 
-          {/* Track */}
+      {reduced ? (
+        <div className="shell grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {FLEET.map((f) => (
+            <FleetCard key={f.capacityKL} f={f} />
+          ))}
+        </div>
+      ) : (
+        <div className="group marquee-mask relative w-full overflow-hidden">
           <div
-            ref={track}
-            className="flex flex-col gap-6 md:w-max md:flex-row md:gap-8 md:pb-20 md:will-change-transform"
+            className="flex w-max animate-marquee group-hover:marquee-paused group-focus-within:marquee-paused"
+            style={{ '--marquee-duration': `${speedSeconds}s` } as CSSProperties}
           >
-            {FLEET.map((f) => (
-              <FleetCard key={f.capacityKL} f={f} />
+            {/* Two identical sequences, each with a trailing gap equal to the
+                card gap, so a -50% translate lands seamlessly. */}
+            {[0, 1].map((seq) => (
+              <div
+                key={seq}
+                className="flex shrink-0 gap-6 pr-6 md:gap-8 md:pr-8"
+                aria-hidden={seq === 1}
+              >
+                {FLEET.map((f) => (
+                  <FleetCard key={`${seq}-${f.capacityKL}`} f={f} />
+                ))}
+              </div>
             ))}
           </div>
-
-          {!VERIFIED.fleet && (
-            <p className="mt-2 text-[11px] text-graphite/70 md:absolute md:bottom-6">
-              Unit counts shown are indicative and pending confirmation.
-            </p>
-          )}
         </div>
-      </section>
-    </div>
+      )}
+
+      {!VERIFIED.fleet && (
+        <p className="shell mt-6 text-[11px] text-graphite/70">
+          Unit counts shown are indicative and pending confirmation.
+        </p>
+      )}
+    </section>
   );
 }
 
@@ -87,7 +70,7 @@ function FleetCard({ f }: { f: FleetClass }) {
   const [ref, kl] = useCountUp<HTMLSpanElement>({ target: f.capacityKL, duration: 1400, threshold: 0.5 });
 
   return (
-    <article className="group relative flex min-h-[220px] flex-col justify-between rounded-sm border border-line bg-panel p-7 transition-[border-color,box-shadow] duration-500 hover:border-brand hover:shadow-[0_0_40px_-12px_rgba(193,154,51,0.6)] md:min-h-[360px] md:w-[340px]">
+    <article className="group/card relative flex min-h-[300px] w-[280px] shrink-0 flex-col justify-between rounded-sm border border-line bg-panel p-7 transition-[border-color,box-shadow] duration-500 hover:border-brand hover:shadow-[0_0_40px_-12px_rgba(193,154,51,0.6)] md:min-h-[360px] md:w-[340px]">
       {/* Technical annotation */}
       <div className="flex items-start justify-between">
         <span className="section-label">Class {String(f.capacityKL).padStart(2, '0')}</span>
@@ -99,7 +82,7 @@ function FleetCard({ f }: { f: FleetClass }) {
         <div className="flex items-end gap-2">
           <span
             ref={ref}
-            className="font-display text-[5.5rem] leading-none text-ink tabular-nums transition-colors duration-500 group-hover:text-brand md:text-[7rem]"
+            className="font-display text-[5.5rem] leading-none text-ink tabular-nums transition-colors duration-500 group-hover/card:text-brand md:text-[7rem]"
           >
             {kl}
           </span>
@@ -112,9 +95,9 @@ function FleetCard({ f }: { f: FleetClass }) {
       <div className="mt-6 flex items-center justify-between border-t border-line pt-4">
         <FleetGlyph />
         <div className="text-right">
-          <span className="block font-display text-xl text-ink">{f.units}</span>
+          <span className="block font-display text-xl text-ink">{f.units ?? '—'}</span>
           <span className="text-[10px] uppercase tracking-eyebrow text-graphite">
-            {VERIFIED.fleet ? 'in service' : 'indicative'}
+            {VERIFIED.fleet && f.units != null ? 'in service' : 'indicative'}
           </span>
         </div>
       </div>

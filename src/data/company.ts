@@ -268,7 +268,8 @@ export const DEPENDABLE: Point[] = [
 
 export interface FleetClass {
   capacityKL: number;
-  units: number;
+  /** Number of tankers in this class. Leave out if not yet known (shows "—"). */
+  units?: number;
   label: string;
 }
 
@@ -277,6 +278,11 @@ export const FLEET: FleetClass[] = [
   { capacityKL: 24, units: 3, label: 'Mid-volume haulage' },
   { capacityKL: 25, units: 6, label: 'Core workhorse class' },
   { capacityKL: 28, units: 2, label: 'High-volume consignments' },
+  // TODO: confirm these classes and add their unit counts.
+  { capacityKL: 30, label: 'Long-haul bulk' },
+  { capacityKL: 32, label: 'Heavy bulk loads' },
+  { capacityKL: 35, label: 'Large-volume transfers' },
+  { capacityKL: 40, label: 'Maximum-capacity runs' },
 ];
 
 /* -------------------------------------------------------------------------- */
