@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#FFFFFF" />
+
+    <!-- Favicon: replace with a real exported mark from the supplied logo. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- PRIMARY SEO -->
+    <title>Transportation &amp; Logistics Services in Bengaluru | VIP Transports</title>
+    <meta
+      name="description"
+      content="Looking for reliable transportation, goods distribution and fuel logistics services? Connect with VIP Transports for business-focused logistics support in Bengaluru."
+    />
+    <meta
+      name="keywords"
+      content="transportation and logistics services in Bengaluru, goods transportation services, commercial transportation, distribution services, fuel transportation, fuel distribution services, business logistics partner, cargo transportation"
+    />
+    <meta name="author" content="VIP Transports" />
+    <link rel="canonical" href="https://www.viptransports.in/" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <!-- OPEN GRAPH -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="VIP Transports" />
+    <meta property="og:title" content="Transportation &amp; Logistics Services in Bengaluru | VIP Transports" />
+    <meta
+      property="og:description"
+      content="Reliable transportation, goods distribution and fuel logistics services for businesses in Bengaluru."
+    />
+    <meta property="og:url" content="https://www.viptransports.in/" />
+    <meta property="og:locale" content="en_IN" />
+    <!-- Replace with a real 1200x630 share image once brand assets are final. -->
+    <meta property="og:image" content="https://www.viptransports.in/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Transportation &amp; Logistics Services in Bengaluru | VIP Transports" />
+    <meta name="twitter:description" content="Reliable transportation, goods distribution and fuel logistics services for businesses in Bengaluru." />
+
+    <!-- Structured data: LocalBusiness with verified contact details. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "VIP Transports",
+        "url": "https://www.viptransports.in/",
+        "description": "Transportation, goods distribution and fuel logistics services for businesses in Bengaluru.",
+        "image": "https://www.viptransports.in/og-image.jpg",
+        "telephone": "+91-9916060602",
+        "email": "Office@viptransports.in",
+        "contactPoint": [
+          { "@type": "ContactPoint", "telephone": "+91-9916060602", "contactType": "customer service" },
+          { "@type": "ContactPoint", "telephone": "+91-9966696246", "contactType": "customer service" }
+        ],
+        "priceRange": "$$",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "#213, 6th Cross, 2nd Stage, Arekere Mico Layout, BG Road",
+          "addressLocality": "Bengaluru",
+          "addressRegion": "Karnataka",
+          "postalCode": "560076",
+          "addressCountry": "IN"
+        },
+        "areaServed": "IN",
+        "knowsAbout": [
+          "Goods transportation",
+          "Distribution services",
+          "Fuel distribution",
+          "Logistics"
+        ]
+      }
+    </script>
+    <!-- Home intro film: hide the navbar from the very first paint (no fade-out flash).
+         Mirrors shouldPlayIntro() in src/components/sections/Hero.tsx. -->
+    <script>
+      (function () {
+        try {
+          var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (location.pathname === '/' && !reduce && sessionStorage.getItem('vip-intro-seen') !== '1') {
+            document.documentElement.classList.add('intro-on');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      VIP Transports — transportation, distribution and fuel logistics services in Bengaluru.
+      Please enable JavaScript to view the full experience, or call +91 9916060602.
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
